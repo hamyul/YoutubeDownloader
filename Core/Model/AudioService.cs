@@ -6,7 +6,7 @@ using System.IO;
 
 namespace YoutubeDownloader.Core.Model
 {
-    public class AudioService
+    public class AudioService : IAudioService
     {
         public EventHandler<EventArgs> TagModified { get; set; }
 

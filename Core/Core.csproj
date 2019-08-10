@@ -41,7 +41,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\AudioService.cs" />
+    <Compile Include="Model\IAudioService.cs" />
+    <Compile Include="Model\IVideoService.cs" />
     <Compile Include="Model\VideoService.cs" />
+    <Compile Include="Wrappers\IYouTubeWrapper.cs" />
+    <Compile Include="Wrappers\YouTubeWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Id3Lib, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">

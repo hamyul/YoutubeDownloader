@@ -1,24 +1,37 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using VideoLibrary;
+using YoutubeDownloader.Core.Wrappers;
 
 namespace YoutubeDownloader.Core.Model
 {
-    public class VideoService
+    public class VideoService : IVideoService
     {
+        private IYouTubeWrapper _youTube;
+
+        public VideoService(IYouTubeWrapper youTube)
+        {
+            _youTube = youTube;
+        }
+
         public EventHandler<EventArgs> Downloaded { get; set; }
 
-        public string Download(string url, string savePath)
+        public string Download(string savePath)
         {
             try
             {
-                YouTubeVideo video = YouTube.Default.GetVideo(url);
-                string filename = GetFilename(savePath, video.Title);
-                File.WriteAllBytes(filename, video.GetBytes());
+                if (string.IsNullOrEmpty(savePath))
+                    throw new ArgumentException("Invalid argument.");
+
+                string fileName = GetFilename(savePath, _youTube.Title);
+
+                if (!SaveFileToDisk(fileName, _youTube.GetBytes()))
+                    throw new IOException("Could not save file on disk.");
+
+
                 Downloaded?.Invoke(this, new EventArgs());
 
-                return filename;
+                return fileName;
             }
             catch (Exception ex)
             {
@@ -27,15 +40,31 @@ namespace YoutubeDownloader.Core.Model
             }
         }
 
+        protected virtual bool SaveFileToDisk(string filename, byte[] videoContent)
+        {
+            bool output = true;
+            try
+            {
+                File.WriteAllBytes(filename, videoContent);
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.ToString());
+                output = false;
+            }
+
+            return output;
+        }
+
         protected string GetFilename(string path, string title)
         {
             string filename = Path.ChangeExtension(title.Replace(" - YouTube", string.Empty), ".mp4");
-            foreach(char c in new string(Path.GetInvalidFileNameChars()))
+            foreach (char c in new string(Path.GetInvalidFileNameChars()))
             {
                 filename = filename.Replace(c.ToString(), string.Empty);
             }
-            
-            foreach(char c in new string(Path.GetInvalidPathChars()))
+
+            foreach (char c in new string(Path.GetInvalidPathChars()))
             {
                 path = path.Replace(c.ToString(), string.Empty);
             }
