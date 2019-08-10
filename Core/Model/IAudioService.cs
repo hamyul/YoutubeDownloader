@@ -7,6 +7,7 @@ namespace YoutubeDownloader.Core.Model
         EventHandler<EventArgs> TagModified { get; set; }
 
         void ExtractAudio(string inputFile, string outputFile);
+
         void SetAudioTags(string outputFile, string title, string album, string artist);
     }
 }

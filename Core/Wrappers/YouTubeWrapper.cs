@@ -34,7 +34,7 @@ namespace YoutubeDownloader.Core.Wrappers
             {
                 Uri uri = new Uri(url);
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }

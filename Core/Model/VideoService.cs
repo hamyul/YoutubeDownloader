@@ -28,7 +28,6 @@ namespace YoutubeDownloader.Core.Model
                 if (!SaveFileToDisk(fileName, _youTube.GetBytes()))
                     throw new IOException("Could not save file on disk.");
 
-
                 Downloaded?.Invoke(this, new EventArgs());
 
                 return fileName;
@@ -56,6 +55,7 @@ namespace YoutubeDownloader.Core.Model
             return output;
         }
 
+        // TODO: Unit test this method.
         protected string GetFilename(string path, string title)
         {
             string filename = Path.ChangeExtension(title.Replace(" - YouTube", string.Empty), ".mp4");
