@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using YoutubeDownloader.Core.Utils;
 using YoutubeDownloader.Core.Wrappers;
 
 namespace YoutubeDownloader.Core.Model
@@ -55,21 +56,9 @@ namespace YoutubeDownloader.Core.Model
             return output;
         }
 
-        // TODO: Unit test this method.
         protected string GetFilename(string path, string title)
         {
-            string filename = Path.ChangeExtension(title.Replace(" - YouTube", string.Empty), ".mp4");
-            foreach (char c in new string(Path.GetInvalidFileNameChars()))
-            {
-                filename = filename.Replace(c.ToString(), string.Empty);
-            }
-
-            foreach (char c in new string(Path.GetInvalidPathChars()))
-            {
-                path = path.Replace(c.ToString(), string.Empty);
-            }
-
-            return Path.Combine(path, filename);
+            return new FilenameFixer(title, path).GetFilename();
         }
     }
 }
