@@ -7,5 +7,7 @@
         string Title { get; }
 
         string Url { get; set; }
+
+        bool Download();
     }
 }
